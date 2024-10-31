@@ -47,8 +47,17 @@ def generate_launch_description():
         package='fast_lio',
         executable='fastlio_mapping',
         parameters=[PathJoinSubstitution([config_path, config_file]),
-                    {'use_sim_time': use_sim_time}],
+                    {'use_sim_time': use_sim_time},
+                    {'body_frame_id': 'body_n_1/body'},
+                    {'map_frame_id': 'body_n_1/camera_init'}
+                    ],
         namespace='body_n_1',
+        remappings=[('/Laser_map', '/body_n_1/Laser_map'),
+                    ('/Odometry', '/body_n_1/Odometry'),
+                    ('/cloud_registered', '/body_n_1/cloud_registered'),
+                    ('/cloud_effected', '/body_n_1/cloud_effected_body_n_1'),
+                    ('/path', '/body_n_1/path')
+                    ],
         output='screen'
     )
     rviz_node = Node(
