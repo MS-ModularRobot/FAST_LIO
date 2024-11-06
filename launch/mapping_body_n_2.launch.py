@@ -31,7 +31,7 @@ def generate_launch_description():
         description='Yaml config file path'
     )
     decalre_config_file_cmd = DeclareLaunchArgument(
-        'config_file', default_value='mid360_body_n_2.yaml',
+        'config_file', default_value='mid360_body_n2.yaml',
         description='Config file'
     )
     declare_rviz_cmd = DeclareLaunchArgument(
@@ -47,8 +47,17 @@ def generate_launch_description():
         package='fast_lio',
         executable='fastlio_mapping',
         parameters=[PathJoinSubstitution([config_path, config_file]),
-                    {'use_sim_time': use_sim_time}],
-        namespace='body_n_2',
+                    {'use_sim_time': use_sim_time},
+                    {'body_frame_id': 'body_n2/body'},
+                    {'map_frame_id': 'body_n2/camera_init'}
+                    ],
+        namespace='body_n2',
+        remappings=[('/Laser_map', '/body_n2/Laser_map'),
+                    ('/Odometry', '/body_n2/Odometry'),
+                    ('/cloud_registered', '/body_n2/cloud_registered'),
+                    ('/cloud_effected', '/body_n2/cloud_effected_body_n2'),
+                    ('/path', '/body_n2/path')
+                    ],
         output='screen'
     )
     rviz_node = Node(
@@ -66,6 +75,6 @@ def generate_launch_description():
     ld.add_action(declare_rviz_config_path_cmd)
 
     ld.add_action(fast_lio_node)
-   # ld.add_action(rviz_node)
+    #ld.add_action(rviz_node)
 
     return ld
